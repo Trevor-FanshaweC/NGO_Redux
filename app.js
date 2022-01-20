@@ -1,15 +1,24 @@
-//const http = require('http');
+import express from 'express';
+import router from './routes/index.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-import { createServer } from 'http';
+// set up the root directory reference
+// find the global URL using fileURLToPath
+// and then turn that into the __dirname (something like Users/Desktop/NGO_Redux/)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
+console.log(__dirname);
+
+const app = express();
 const port = process.env.PORT || 3000;
 
-const server = createServer((req, res) => {
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'text/html');
-    res.end('<h1>Node and Express is easy!</h1>');
-});
+app.use(express.static(path.join(__dirname, "public")));
 
-server.listen(port, () => {
-    console.log(`Server running at ${port}/`);
+// tell app to use the router file
+app.use('/', router);
+
+app.listen(port, () => {
+    console.log(`App is running at ${port}/`);
 });
